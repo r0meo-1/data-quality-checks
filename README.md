@@ -1,4 +1,4 @@
-# sql-data-quality — Data Quality Checks (PostgreSQL)
+# data-quality-checks — Data Quality Checks (PostgreSQL)
 
 [![SQL Data Quality](https://github.com/r0meo-1/data-quality-checks/actions/workflows/sql-checks.yml/badge.svg)](https://github.com/r0meo-1/data-quality-checks/actions/workflows/sql-checks.yml)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
