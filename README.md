@@ -1,6 +1,6 @@
 # sql-data-quality — Data Quality Checks (PostgreSQL)
 
-[![SQL Data Quality](https://github.com/r0meo-1/sql-data-quality/actions/workflows/sql-checks.yml/badge.svg)](https://github.com/r0meo-1/sql-data-quality/actions/workflows/sql-checks.yml)
+[![SQL Data Quality](https://github.com/r0meo-1/data-quality-checks/actions/workflows/sql-checks.yml/badge.svg)](https://github.com/r0meo-1/data-quality-checks/actions/workflows/sql-checks.yml)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-Data%20QA-336791)
 ![License](https://img.shields.io/badge/license-MIT-blue)
