@@ -46,3 +46,25 @@ jobs:
 
       - name: Run data-quality checks
         run: bash scripts/run_checks.sh
+
+      - name: Verify all clean-fixture counts
+        run: python3 scripts/verify_fixture.py clean
+
+      - name: Load anomalous fixture into isolated CI database
+        run: |
+          psql -X "$DATABASE_URL" -v ON_ERROR_STOP=1 -f db/schema.sql
+          psql -X "$DATABASE_URL" -v ON_ERROR_STOP=1 -f db/seed-anomalies.sql
+
+      - name: Verify every check detects its known anomalies
+        run: python3 scripts/verify_fixture.py anomalies
+
+      - name: Verify runner rejects anomalous data
+        run: |
+          set +e
+          bash scripts/run_checks.sh
+          status=$?
+          set -e
+          if [ "$status" -ne 1 ]; then
+            echo "Expected anomaly exit code 1, got $status"
+            exit 1
+          fi
