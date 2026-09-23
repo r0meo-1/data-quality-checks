@@ -32,6 +32,13 @@ Data quality checks живут **поверх** реальности интег�
 2. Заливает схему + эталон
 3. Гоняет все `check_*.sql`
 4. Падает, если кто-то решил, что «paid без платежа — это нормально»
+5. Пересоздаёт схему только в изолированной CI-БД и загружает `seed-anomalies.sql`
+6. Проверяет точное число нарушений каждого правила и ненулевой код раннера
+
+На чистом наборе ожидается 0 строк для всех десяти правил. На аномальном —
+по одной строке, кроме расхождения сумм: там две заявки (недоплата и отсутствие
+успешного платежа). Так CI обнаруживает и ложные срабатывания, и проверки,
+которые перестали находить дефекты. Сломанный SQL также завершает проверку ошибкой.
 
 ---
 
@@ -60,6 +67,7 @@ db/seed.sql              — чистые данные (CI зелёный)
 db/seed-anomalies.sql    — «как сломать CRM за 5 минут»
 checks/check_*.sql       — сами детективы
 scripts/run_checks.sh    — раннер: нашёл нарушение → exit ≠ 0
+scripts/verify_fixture.py — точные ожидаемые количества для обоих тестовых наборов
 docs/findings-example.md — пример отчёта «ой»
 ```
 
@@ -77,11 +85,13 @@ export PGPASSWORD=qa
 psql "$DATABASE_URL" -f db/schema.sql
 psql "$DATABASE_URL" -f db/seed.sql
 bash scripts/run_checks.sh        # → всё ок, можно выдохнуть
+python3 scripts/verify_fixture.py clean
 
 # режим «покажи ужасы»:
 psql "$DATABASE_URL" -f db/schema.sql
 psql "$DATABASE_URL" -f db/seed-anomalies.sql
 bash scripts/run_checks.sh        # → список нарушений
+python3 scripts/verify_fixture.py anomalies  # → подтверждение ожидаемых нарушений
 ```
 
 ---
